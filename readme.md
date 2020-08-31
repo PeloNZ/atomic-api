@@ -1,10 +1,13 @@
 # Atomic Client PHP Library
 
+* [Set up guide](#set-up-guide)
+  + [Front end SDK](#front-end-sdk)
+    - [Authentication](#authentication)
+  + [Back end API](#back-end-api)
+    - [Authentication](#authentication-1)
+    - [API credential roles](#api-credential-roles)
+
 For the https://atomic.io API
-
-TODO make this into its own package
-
-{:toc}
 
 ## Set up guide
 
