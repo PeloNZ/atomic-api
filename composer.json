@@ -1,0 +1,25 @@
+{
+    "name": "figured/atomic-api",
+    "description": "Atomic Notifications API library for PHP https://www.atomic.io/",
+    "type": "library",
+    "autoload": {
+        "psr-4": {
+            "Atomic\\": ["src/"]
+        }
+    },
+    "require": {
+        "ext-json": "*",
+        "guzzlehttp/guzzle": "^6.5.5",
+        "lcobucci/jwt": "3.3.3",
+        "php": ">=7.1",
+        "ramsey/uuid": "^3.7"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Chris Wharton",
+            "email": "chris.wharton@figured.com"
+        }
+    ],
+    "minimum-stability": "stable"
+}
