@@ -8,9 +8,9 @@ namespace Atomic;
 class EventPayload
 {
     /**
-     * @var array
+     * @var EventMetadata
      */
-    private $metadata = [];
+    private $metadata;
 
     /**
      * @var array
@@ -24,11 +24,11 @@ class EventPayload
 
     /**
      * EventPayload constructor.
-     * @param array|string[] $metadata
+     * @param EventMetadata $metadata
      * @param array|string[] $detail
      * @param array|string[] $target A list of user ids to target
      */
-    public function __construct(array $metadata, array $detail, array $target)
+    public function __construct(EventMetadata $metadata, array $detail, array $target)
     {
         $this->setDetail($detail);
         $this->setMetadata($metadata);
@@ -36,18 +36,18 @@ class EventPayload
     }
 
     /**
-     * @return array
+     * @return EventMetadata
      */
-    public function getMetadata(): array
+    public function getMetadata(): EventMetadata
     {
         return $this->metadata;
     }
 
     /**
-     * @param array $metadata
+     * @param EventMetadata $metadata
      * @return EventPayload
      */
-    private function setMetadata(array $metadata): EventPayload
+    private function setMetadata(EventMetadata $metadata): EventPayload
     {
         $this->metadata = $metadata;
 
@@ -87,19 +87,8 @@ class EventPayload
      */
     private function setTarget(array $target): EventPayload
     {
-        $this->target = [
-            'usersById' => $target,
-        ];
+        $this->target = $target;
 
         return $this;
-    }
-
-    public function toArray(): array
-    {
-        return [
-            'metadata' => $this->metadata,
-            'detail'   => $this->detail,
-            'target'   => $this->target,
-        ];
     }
 }
