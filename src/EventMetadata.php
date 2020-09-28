@@ -15,15 +15,15 @@ use Exception;
 class EventMetadata
 {
     /**
-     * @var string
+     * @var string|null
      */
     private $embargo;
     /**
-     * @var string
+     * @var string|null
      */
     private $expires;
     /**
-     * @var string
+     * @var string|null
      */
     private $expiresInterval;
     /**
@@ -56,14 +56,13 @@ class EventMetadata
             'embargo' => $this->getEmbargo(),
             'expires' => $this->getExpires(),
             'expires_interval' => $this->getExpiresInterval(),
-            'overwrite' => $this->getOverwrite(),
-        ]);
+        ]) + ['overwrite' => $this->getOverwrite()];
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getEmbargo(): string
+    public function getEmbargo()
     {
         return $this->embargo;
     }
@@ -83,9 +82,9 @@ class EventMetadata
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getExpires(): string
+    public function getExpires()
     {
         return $this->expires;
     }
