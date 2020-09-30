@@ -1,6 +1,7 @@
 <?php
 namespace Atomic;
 
+use Exception;
 use Ramsey\Uuid\Uuid;
 
 /**
@@ -32,7 +33,7 @@ class Event
      * @param string $name
      * @param EventPayload $payload
      * @param string|null $lifecycleId
-     * @throws \Exception
+     * @throws Exception
      */
     public function __construct(string $name, EventPayload $payload, ?string $lifecycleId = null)
     {
@@ -71,7 +72,7 @@ class Event
     /**
      * @param string|null $lifecycleId UUID4
      * @return Event
-     * @throws \Exception
+     * @throws Exception
      */
     private function setLifecycleId(?string $lifecycleId = null)
     {
@@ -107,18 +108,26 @@ class Event
         return [
             'name'        => $this->getName(),
             'lifecycleId' => $this->getLifecycleId(),
-            'payload'     => $this->getPayload()->toArray(),
+            'payload'     => $this->getPayload(),
         ];
     }
 
     /**
-     * Get the model as JSON for the API payload.
+     * Get the event as JSON for the API payload.
      * @return string
      */
     public function toJson(): string
     {
-        $event = $this->toArray();
-
-        return json_encode(['events' => [$event]], JSON_UNESCAPED_SLASHES);
+        return json_encode(['events' => [[
+            'name'        => $this->getName(),
+            'lifecycleId' => $this->getLifecycleId(),
+            'payload'     => [
+                'metadata' => $this->getPayload()->getMetadata()->toArray(),
+                'detail' => $this->getPayload()->getDetail(),
+                'target' => [
+                    'usersById' => array_values($this->getPayload()->getTarget())
+                ]
+            ]
+        ]]], JSON_UNESCAPED_SLASHES);
     }
 }
