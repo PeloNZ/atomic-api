@@ -2,13 +2,13 @@
 namespace Atomic;
 
 use DateInterval;
-use DateTime;
+use DateTimeImmutable;
 use Exception;
 use GuzzleHttp\Client;
 use InvalidArgumentException;
-use Lcobucci\JWT\Builder;
-use Lcobucci\JWT\Signer\Key;
+use Lcobucci\JWT\Configuration;
 use Lcobucci\JWT\Signer\Rsa\Sha256;
+use Lcobucci\JWT\Signer\Key\InMemory;
 
 /**
  * Class ApiClient
@@ -330,14 +330,16 @@ class ApiClient
         string $privateKeyPath,
         string $publicKeyPath
     ): string {
-        $now        = new DateTime();
+        $now        = new DateTimeImmutable();
         $issuedAt   = $now->getTimestamp();
         $expiresAt  = $now->add(new DateInterval('P' . self::JWT_DAYS_TTL . 'D'))->getTimestamp();
         $signer     = new Sha256();
-        $privateKey = new Key($privateKeyPath);
-        $publicKey  = new Key($publicKeyPath);
+        $privateKey = new InMemory::plainText($privateKeyPath);
+        $publicKey  = new InMemory::plainText($publicKeyPath);
 
-        $token = (new Builder())
+        $config = new Configuration::forAsymmetricSigner($signer, $privateKey, $publicKey);
+
+        $token = $config->builder()
                 ->issuedBy($issuer)
                 ->permittedFor(self::JWT_AUDIENCE)
                 ->issuedAt($issuedAt)
