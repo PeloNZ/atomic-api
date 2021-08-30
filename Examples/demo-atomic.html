@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+</head>
+<body>
+<h1>Atomic Demo</h1>
+<!-- If the launch command works then you will see the Atomic notification bubble -->
+
+<script src="https://downloads.atomic.io/web-sdk/release/latest/sdk.js"></script>
+
+<script lang="JavaScript">
+    const orgId = 'your-org-id';
+    const apiKey = 'your-api-key';
+    const siteId = 'your-site-id';
+    const jwt = 'YOUR_JWT'; // Generate this with the jwt.js node script.
+    const containerId = 'your-container-id';
+
+    AtomicSDK.initialise('https://' + orgId + '.client-api.atomic.io', apiKey, siteId);
+
+    AtomicSDK.launch({
+        authToken: jwt,
+        streamContainerId: containerId,
+    });
+</script>
+</body>
+</html>
