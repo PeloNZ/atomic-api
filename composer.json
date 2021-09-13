@@ -14,6 +14,9 @@
         "php": ">=7.1",
         "ramsey/uuid": "^3.7"
     },
+    "require-dev": {
+        "roave/security-advisories": "dev-latest"
+    },
     "license": "MIT",
     "authors": [
         {
@@ -21,5 +24,8 @@
             "email": "chris.wharton@figured.com"
         }
     ],
-    "minimum-stability": "stable"
+    "minimum-stability": "stable",
+    "scripts": {
+        "audit": "composer update --dry-run roave/security-advisories"
+    }
 }
