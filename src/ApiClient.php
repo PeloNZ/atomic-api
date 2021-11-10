@@ -348,8 +348,8 @@ class ApiClient
                 ->relatedTo($sub)
                 ->getToken($signer, $privateKey);
 
-        if ($token->verify($signer, $publicKey)) {
-            return (string) $token;
+        if($config->validator()->validate($token, ...$config->validationConstraints())) {
+            return $token->toString();
         }
 
         return '';
