@@ -9,6 +9,8 @@ use InvalidArgumentException;
 use Lcobucci\JWT\Configuration;
 use Lcobucci\JWT\Signer\Rsa\Sha256;
 use Lcobucci\JWT\Signer\Key\InMemory;
+use Lcobucci\JWT\Validation\Constraint\IssuedBy;
+use Lcobucci\JWT\Validation\Constraint\PermittedFor;
 
 /**
  * Class ApiClient
@@ -339,17 +341,24 @@ class ApiClient
 
         $config = Configuration::forAsymmetricSigner($signer, $privateKey, $publicKey);
 
-        $token = $config->builder()
-                ->issuedBy($issuer)
-                ->permittedFor(self::JWT_AUDIENCE)
-                ->issuedAt($issuedAt)
-                ->expiresAt($expiresAt)
-                ->withClaim('apiKey', $apiKey)
-                ->relatedTo($sub)
-                ->getToken($signer, $privateKey);
+        $constraints = [
+            new PermittedFor(self::JWT_AUDIENCE),
+            new IssuedBy($issuer),
+        ];
 
-        if ($token->verify($signer, $publicKey)) {
-            return (string) $token;
+        $config->setValidationConstraints(...$constraints);
+
+        $token = $config->builder()
+            ->issuedBy($issuer)
+            ->permittedFor(self::JWT_AUDIENCE)
+            ->issuedAt($issuedAt)
+            ->expiresAt($expiresAt)
+            ->withClaim('apiKey', $apiKey)
+            ->relatedTo($sub)
+            ->getToken($signer, $privateKey);
+
+        if($config->validator()->validate($token, ...$config->validationConstraints())) {
+            return $token->toString();
         }
 
         return '';
