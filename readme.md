@@ -28,7 +28,7 @@ See https://documentation.atomic.io/install/auth-SDK
    
         ssh-keygen -t rsa -P "" -b 4096 -m PEM -f jwtRS256.key
    
-        ssh-keygen -e -m PEM -f jwtRS256.key > jwtRS256.key.pub
+        ssh-keygen -e -m PKCS8 -f jwtRS256.key > jwtRS256.key.pub
    
 2.  Add your public key in the Workbench
     * From the settings menu in the Workbench sidebar menu, choose SDK.

@@ -9,10 +9,10 @@
     },
     "require": {
         "ext-json": "*",
-        "guzzlehttp/guzzle": "^6.5.5",
-        "lcobucci/jwt": "3.3.3",
-        "php": ">=7.1",
-        "ramsey/uuid": "^3.7"
+        "guzzlehttp/guzzle": "^7.3",
+        "lcobucci/jwt": "^4.1",
+        "php": ">=7.3",
+        "ramsey/uuid": "^4.2"
     },
     "license": "MIT",
     "authors": [
