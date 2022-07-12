@@ -194,7 +194,9 @@ class ApiClient
     /** @throws \Exception */
     public function createUsers(Customer ...$customers): array
     {
-        return $this->post('users', self::EVENTS, json_encode($customers, JSON_THROW_ON_ERROR));
+        return $this->post('users', self::EVENTS, json_encode([
+            'users' => $customers,
+        ], JSON_THROW_ON_ERROR));
     }
 
     public function createUserCustomFields(): void
