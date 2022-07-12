@@ -185,6 +185,29 @@ class ApiClient
         return $this->put('cards/complete', self::EVENTS, $query);
     }
 
+    /** @throws \Exception */
+    public function fetchUsers(?array $query = null): array
+    {
+        return $this->get('users', self::EVENTS, $query);
+    }
+
+    /** @throws \Exception */
+    public function createUsers(Customer ...$customers): array
+    {
+        return $this->post('users', self::EVENTS, json_encode($customers, JSON_THROW_ON_ERROR));
+    }
+
+    public function createUserCustomFields(): void
+    {
+        $fields = array_map(fn (string $field) => [
+            'name' => $field,
+            'label' => $field,
+            'type' => 'text',
+        ], Customer::CUSTOM_FIELDS);
+
+        $this->put('custom-profile-fields', self::EVENTS, null, $fields);
+    }
+
     /**
      * @link https://documentation.atomic.io/api/user-preferences?id=user-preferences
      * @param array $payload
@@ -418,9 +441,9 @@ class ApiClient
      * @param string $role
      * @param array|null $query
      * @param array|null $payload
-     * @return mixed
+     * @return array
      */
-    private function put(string $operation, string $role, ?array $query = null, ?array $payload = null)
+    private function put(string $operation, string $role, ?array $query = null, ?array $payload = null): array
     {
         $uri         = $this->atomicApi . $this->siteId . '/' . $operation;
         $options     = [
