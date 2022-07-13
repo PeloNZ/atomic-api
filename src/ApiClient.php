@@ -6,6 +6,7 @@ use DateTimeImmutable;
 use Exception;
 use GuzzleHttp\Client;
 use InvalidArgumentException;
+use JsonSerializable;
 use Lcobucci\JWT\Configuration;
 use Lcobucci\JWT\Signer\Rsa\Sha256;
 use Lcobucci\JWT\Signer\Key\InMemory;
@@ -192,20 +193,21 @@ class ApiClient
     }
 
     /** @throws \Exception */
-    public function createUsers(Customer ...$customers): array
+    public function createUsers(?array $tags = null, JsonSerializable | array ...$customers): array
     {
-        return $this->post('users', self::EVENTS, json_encode([
+        return $this->post('users', self::EVENTS, json_encode(array_filter([
             'users' => $customers,
-        ], JSON_THROW_ON_ERROR));
+            'tags' => $tags,
+        ]), JSON_THROW_ON_ERROR));
     }
 
-    public function createUserCustomFields(): void
+    public function createUserCustomFields(CustomField ...$customFields): void
     {
-        $fields = array_map(fn (string $field) => [
-            'name' => $field,
-            'label' => $field,
-            'type' => 'text',
-        ], Customer::CUSTOM_FIELDS);
+        $fields = array_map(fn (CustomField $field) => [
+            'name' => $field->name(),
+            'label' => $field->label(),
+            'type' => $field->validatedType(),
+        ], $customFields);
 
         $this->put('custom-profile-fields', self::EVENTS, null, $fields);
     }
